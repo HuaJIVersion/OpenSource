@@ -22,6 +22,7 @@ namespace rm {
 *				// regulation mode
 *	@Return:	// regulated rec
 */
+	//矩形矫正函数
 	cv::RotatedRect& adjustRec(cv::RotatedRect& rec, const int mode)
 	{
 		using std::swap;
@@ -29,19 +30,19 @@ namespace rm {
 		float& height = rec.size.height;
 		float& angle = rec.angle;
 
-		if (mode == WIDTH_GREATER_THAN_HEIGHT)
-		{
+   		if (mode == WIDTH_GREATER_THAN_HEIGHT)//该模式下需要宽大于高
+       		{
 			if (width < height)
 			{
-				swap(width, height);
+				swap(width, height);//矫正长宽
 				angle += 90.0;
 			}
 		}
-
+                //对旋转角度进行矫正控制在（-90,90）之间
 		while (angle >= 90.0) angle -= 180.0;
 		while (angle < -90.0) angle += 180.0;
 
-		if (mode == ANGLE_TO_UP)
+		if (mode == ANGLE_TO_UP)//该模式下需要角度矫正
 		{
 			if (angle >= 45.0)
 			{
@@ -54,9 +55,9 @@ namespace rm {
 				angle += 90.0;
 			}
 		}
-		return rec;
+		return rec;//返回矫正之后得到的矩形
 	}
-
+ 	//对未识别的装甲初始化
 	ArmorDescriptor::ArmorDescriptor()
 	{
 		distScore = 0;
@@ -70,7 +71,7 @@ namespace rm {
 		}
 		type = UNKNOWN_ARMOR;
 	}
-
+	//识别灯条
 	ArmorDescriptor::ArmorDescriptor(const LightDescriptor& lLight, const LightDescriptor& rLight, const int armorType, const cv::Mat& grayImg, float rotaScore, ArmorParam _param)
 	{
 		//handle two lights
@@ -91,7 +92,7 @@ namespace rm {
 		exRLight.points(pts_r);
 		cv::Point2f upper_r = pts_r[1];
 		cv::Point2f lower_r = pts_r[0];
-
+		//利用两侧灯条确定中间装甲板的位置
 		vertex.resize(4);
 		vertex[0] = upper_l;
 		vertex[1] = upper_r;
@@ -115,7 +116,7 @@ namespace rm {
 		distScore = exp(-sightOffset / _param.sight_offset_normalized_base);
 
 	}
-
+	//对识别的装甲透视变换为正视矩形
 	void ArmorDescriptor::getFrontImg(const Mat& grayImg)
 	{
 		using cvex::distance;
@@ -136,7 +137,7 @@ namespace rm {
 			width = 50;
 			height = 50;
 		}
-
+		//透视变换
 		Point2f src[4]{ Vec2f(tl), Vec2f(tr), Vec2f(br), Vec2f(bl) };
 		Point2f dst[4]{ Point2f(0.0, 0.0), Point2f(width, 0.0), Point2f(width, height), Point2f(0.0, height) };
 		const Mat perspMat = getPerspectiveTransform(src, dst);
@@ -146,11 +147,12 @@ namespace rm {
 	bool ArmorDescriptor::isArmorPattern() const//不清楚作用，没掌握？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？
 	{
 		  //cut the central part of the armor
-#ifdef SVM
+
+#ifdef SVM	//利用SVM模型识别
 		Mat regulatedImg;
 		if (type == BIG_ARMOR)
 		{
-			regulatedImg = frontImg(Rect(21, 0, 50, 50));
+			regulatedImg = frontImg(Rect(21, 0, 50, 50));//图像过大则需按参数提取出ROI区
 		}
 		else
 		{
