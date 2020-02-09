@@ -272,18 +272,19 @@ namespace rm {
 			*/
 			vector<vector<Point>> lightContours;
 			cv::findContours(binBrightImg.clone(), lightContours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
+			//遍历轮廓
 			for (const auto& contour : lightContours)
 			{
 				float lightContourArea = contourArea(contour);
 				if (contour.size() <= 5 ||
-					lightContourArea < _param.light_min_area) continue;
-
+					lightContourArea < _param.light_min_area) continue;//筛除异常轮廓
+				//找出外接矩形并进行矫正
 				RotatedRect lightRec = fitEllipse(contour);
 				adjustRec(lightRec, ANGLE_TO_UP);
 
 				//float solidity = lightContourArea / lightRec.size.area();
 				if (lightRec.size.width / lightRec.size.height > _param.light_max_ratio ||
-					lightContourArea / lightRec.size.area() < _param.light_contour_min_solidity) continue;
+					lightContourArea / lightRec.size.area() < _param.light_contour_min_solidity) continue;//根据比例筛除异常矩形
 
 				//Mat temp;
 				//cvex::showRectangle("light_right_position", _srcImg, temp, lightRec, cvex::GREEN,0, _roi.tl());
