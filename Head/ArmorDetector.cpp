@@ -71,7 +71,7 @@ namespace rm {
 		}
 		type = UNKNOWN_ARMOR;
 	}
-	//识别灯条
+	//识别灯条确定装甲板位置
 	ArmorDescriptor::ArmorDescriptor(const LightDescriptor& lLight, const LightDescriptor& rLight, const int armorType, const cv::Mat& grayImg, float rotaScore, ArmorParam _param)
 	{
 		//handle two lights
@@ -237,7 +237,7 @@ namespace rm {
 		rectangle(_debugImg, _roi, cvex::YELLOW);
 #endif // DEBUG_DETECTION
 	}
-
+	//图像预处理
 	int ArmorDetector::detect()
 	{
 		/*
