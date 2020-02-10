@@ -143,7 +143,7 @@ namespace rm {
 		const Mat perspMat = getPerspectiveTransform(src, dst);
 		cv::warpPerspective(grayImg, frontImg, perspMat, Size(width, height));
 	}
-
+	//判别是否为目标装甲板
 	bool ArmorDescriptor::isArmorPattern() const//不清楚作用，没掌握？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？
 	{
 		  //cut the central part of the armor
@@ -166,7 +166,7 @@ namespace rm {
 		Mat data = temp.reshape(1, 1);
 
 		data.convertTo(data, CV_32FC1);
-
+		//调用SVM模型
 		Ptr<SVM> svm = StatModel::load<SVM>("D:/文档/seu/Robomaster2018-SEU-OpenSource-master/Armor/SVM3.xml");
 
 
@@ -288,7 +288,8 @@ namespace rm {
 
 				//Mat temp;
 				//cvex::showRectangle("light_right_position", _srcImg, temp, lightRec, cvex::GREEN,0, _roi.tl());
-
+				
+				//适当放大灯条并保存
 				lightRec.size.width *= _param.light_color_detect_extend_ratio;
 				lightRec.size.height *= _param.light_color_detect_extend_ratio;
 				Rect lightRect = lightRec.boundingRect();
@@ -318,11 +319,13 @@ namespace rm {
 		*/
 
 		{
+			//对灯条排序（按灯条从左往右）
 			sort(lightInfos.begin(), lightInfos.end(), [](const LightDescriptor& ld1, const LightDescriptor& ld2)
 				{
 					return ld1.center.x < ld2.center.x;
 				});
 			vector<int> minRightIndices(lightInfos.size(), -1);
+			//遍历所有灯条
 			for (size_t i = 0; i < lightInfos.size(); i++)
 			{
 				for (size_t j = i + 1; (j < lightInfos.size()); j++)
@@ -341,6 +344,8 @@ namespace rm {
 					*	morphologically similar: // parallel
 									 // similar height
 					*/
+					
+					//根据角度差和距离筛选
 					float angleDiff_ = abs(leftLight.angle - rightLight.angle);
 					float LenDiff_ratio = abs(leftLight.length - rightLight.length) / max(leftLight.length, rightLight.length);
 					if (angleDiff_ > _param.light_max_angle_diff_ ||
