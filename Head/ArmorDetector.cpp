@@ -430,15 +430,15 @@ namespace rm {
 		if (_armors.empty())
 		{
 			_targetArmor.clear();
-
+			//根据_flag信息返回当前识别状态
 			if (_flag == ARMOR_LOCAL)
 			{
-				cout << "Tracking lost" << endl;//
+				cout << "Tracking lost" << endl;
 				return _flag = ARMOR_LOST;
 			}
 			else
 			{
-				cout << "No armor pattern detected." << endl;//
+				cout << "No armor pattern detected." << endl;
 				return _flag = ARMOR_NO;
 			}
 		}
@@ -459,7 +459,7 @@ namespace rm {
 		//update the flag status	
 		_trackCnt++;
 
-		//显示中心
+		//显示待打击装甲板中心
 #if defined(DEBUG_DETECTION) || defined(SHOW_RESULT)
 		vector<Point> intVertex;
 		for (const auto& point : _targetArmor.vertex)
@@ -476,7 +476,7 @@ namespace rm {
 
 		return _flag = ARMOR_LOCAL;
 	}
-
+	//对上面提取的顶点矫正，返回矫正过后的顶点坐标
 	const std::vector<cv::Point2f> ArmorDetector::getArmorVertex() const
 	{
 		vector<cv::Point2f> realVertex;
