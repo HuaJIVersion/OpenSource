@@ -5,7 +5,8 @@
 
 #define DEBUG_DETECTION
 #define DEBUG_PRETREATMENT
-namespace rm {
+namespace rm 
+{
 	struct ArmorParam
 	{
 		//Pre-treatment
