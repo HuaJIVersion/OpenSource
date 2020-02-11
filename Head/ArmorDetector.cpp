@@ -459,6 +459,7 @@ namespace rm {
 		//update the flag status	
 		_trackCnt++;
 
+		//ÏÔÊ¾ÖÐÐÄ
 #if defined(DEBUG_DETECTION) || defined(SHOW_RESULT)
 		vector<Point> intVertex;
 		for (const auto& point : _targetArmor.vertex)
