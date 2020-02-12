@@ -17,7 +17,7 @@ namespace cvex
 	using cv::waitKey;
 
 	using std::vector;
-
+	//？？？
 	void showHist(const Mat img)
 	{
 		Mat hist;
@@ -38,7 +38,7 @@ namespace cvex
 		imshow("histogram", histImage);
 		waitKey();
 	}
-
+	//绘制矩形，按照指定坐标在图像上绘制矩形
 	void rotatedRectangle(Mat& img, const RotatedRect& rec, const Scalar& color)
 	{
 		if (&rec == nullptr) return;
