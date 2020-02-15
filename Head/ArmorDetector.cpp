@@ -38,7 +38,7 @@ namespace rm {
 				angle += 90.0;
 			}
 		}
-                //对旋转角度进行矫正控制在（-90,90）之间
+		//对旋转角度进行矫正控制在（-90,90）之间
 		while (angle >= 90.0) angle -= 180.0;
 		while (angle < -90.0) angle += 180.0;
 
@@ -57,7 +57,7 @@ namespace rm {
 		}
 		return rec;//返回矫正之后得到的矩形
 	}
- 	//对未识别的装甲初始化
+ 	//初始化用于装甲识别
 	ArmorDescriptor::ArmorDescriptor()
 	{
 		distScore = 0;

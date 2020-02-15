@@ -9,8 +9,8 @@ namespace cv
 	/*
 	*	@Brief: Translate a coordination
 	*/
-	template<typename T1, typename T2>
-	inline Point_<T1> operator/(const cv::Point_<T1>& pt, const T2 den)
+	template<typename T1, typename T2>//对输入的坐标进行等比例缩小
+	inline Point_<T1> operator/(const cv::Point_<T1>& pt, const T2 den)//运算符重载
 	{
 		return Point_<T1>(pt.x / den, pt.y / den);
 	}
@@ -20,8 +20,8 @@ namespace cv
 	/*
 	*	@Brief: Translate a rotated rectangle
 	*/
-	template<typename T>
-	cv::RotatedRect operator+(const cv::RotatedRect& rec, const cv::Point_<T>& pt)
+	template<typename T>//对输入的矩形进行平移
+	cv::RotatedRect operator+(const cv::RotatedRect& rec, const cv::Point_<T>& pt)//运算符重载
 	{
 		return cv::RotatedRect(cv::Point2f(rec.center.x + pt.x, rec.center.y + pt.y), rec.size, rec.angle);
 	}
@@ -81,7 +81,7 @@ namespace cvex
 			return cv::Point2f(float(b1 * c2 - b2 * c1) / d, float(c1 * a2 - c2 * a1) / d);
 		}
 	}
-	inline const cv::Point2f crossPointOf(const cv::Vec4f& line1, const cv::Vec4f& line2)
+	inline const cv::Point2f crossPointOf(const cv::Vec4f& line1, const cv::Vec4f& line2)//？？
 	{
 		const std::array<cv::Point2f, 2> line1_{ cv::Point2f(line1[2],line1[3]),cv::Point2f(line1[2] + line1[0],line1[3] + line1[1]) };
 		const std::array<cv::Point2f, 2> line2_{ cv::Point2f(line2[2],line2[3]),cv::Point2f(line2[2] + line2[0],line2[3] + line2[1]) };
@@ -129,7 +129,7 @@ namespace cvex
 	*/
 	void showHist(const cv::Mat img);
 
-	void rotatedRectangle(cv::Mat& img, const cv::RotatedRect& rec, const cv::Scalar& color);
+	void rotatedRectangle(cv::Mat& img, const cv::RotatedRect& rec, const cv::Scalar& color);//具体定义在opencv_extended.cpp中
 
 	/*
 	*	@Brief: Draw a single contour
@@ -172,7 +172,7 @@ namespace cvex
 		if (srcImg.channels() == 1)	cvtColor(srcImg, dstImg, cv::COLOR_GRAY2BGR);
 		else if (srcImg.data != dstImg.data) srcImg.copyTo(dstImg);
 
-		cv::drawContours(dstImg, contours, -1, color, 1, 8, cv::noArray(), INT_MAX, offset);
+		cv::drawContours(dstImg, contours, -1, color, 1, 8, cv::noArray(), INT_MAX, offset);//绘制轮廓
 
 		cv::imshow(windowName, dstImg);
 		if (waitTime >= 0)
@@ -180,7 +180,7 @@ namespace cvex
 			cv::waitKey(waitTime);
 		}
 	}
-
+	//在输入图像上绘制输入的旋转矩形
 	template <typename RecType, bool = std::is_pointer<RecType>::value>
 	struct showRectangle_wrapper
 	{};
@@ -234,7 +234,7 @@ namespace cvex
 		}
 
 	};
-
+	//
 	template <typename RecType>
 	void showRectangle(const std::string& windowName,
 		const cv::Mat& srcImg,
@@ -352,7 +352,8 @@ namespace cvex
 		}
 	}
 	*/
-
+	
+	//画两条交叉直线
 	template<typename T>
 	void drawCrossing(const cv::Mat& srcImg,
 		cv::Mat& dstImg,
