@@ -81,7 +81,7 @@ namespace cvex
 			return cv::Point2f(float(b1 * c2 - b2 * c1) / d, float(c1 * a2 - c2 * a1) / d);
 		}
 	}
-	inline const cv::Point2f crossPointOf(const cv::Vec4f& line1, const cv::Vec4f& line2)//£ø£ø
+	inline const cv::Point2f crossPointOf(const cv::Vec4f& line1, const cv::Vec4f& line2)//‘≠¿Ì£ø
 	{
 		const std::array<cv::Point2f, 2> line1_{ cv::Point2f(line1[2],line1[3]),cv::Point2f(line1[2] + line1[0],line1[3] + line1[1]) };
 		const std::array<cv::Point2f, 2> line2_{ cv::Point2f(line2[2],line2[3]),cv::Point2f(line2[2] + line2[0],line2[3] + line2[1]) };
