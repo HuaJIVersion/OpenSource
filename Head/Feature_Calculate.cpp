@@ -1,5 +1,5 @@
 /***************
-华机战队视觉识别 - 特征计算函数集
+华机战队能量机关视觉识别 - 特征计算函数集
 Author：曾煜文
 ***************/
 #include<opencv2/opencv.hpp>
@@ -35,20 +35,20 @@ void Kernel_Calculate(Mat &srcImage ,int *resultArray)
 
 	final_result = Mat::zeros(result_0.size(), CV_8U);
 
-	for (i = 0; i < final_result.row; i++)
+	for (i = 0; i < final_result.rows; i++)
 	{
-		for (j = 0; j < final_result.col; j++)
+		for (j = 0; j < final_result.cols; j++)
 		{
 			k = 0;
-			max = result_0.at<short>;
-			if (result_45.at<short> > max) k = 1, max = result_45.at<short>;
-			if (result_90.at<short> > max) k = 2, max = result_90.at<short>;
-			if (result_135.at<short> > max) k = 3, max = result_135.at<short>;
-			if (result_180.at<short> > max) k = 4, max = result_180.at<short>;
-			if (result_225.at<short> > max) k = 5, max = result_225.at<short>;
-			if (result_270.at<short> > max) k = 6, max = result_270.at<short>;
-			if (result_315.at<short> > max) k = 7, max = result_315.at<short>;
-			final_result.at<char> = k;
+			max = result_0.at<short>(i, j);
+			if (result_45.at<short>(i, j) > max) k = 1, max = result_45.at<short>(i, j);
+			if (result_90.at<short>(i, j) > max) k = 2, max = result_90.at<short>(i, j);
+			if (result_135.at<short>(i, j) > max) k = 3, max = result_135.at<short>(i, j);
+			if (result_180.at<short>(i, j) > max) k = 4, max = result_180.at<short>(i, j);
+			if (result_225.at<short>(i, j) > max) k = 5, max = result_225.at<short>(i, j);
+			if (result_270.at<short>(i, j) > max) k = 6, max = result_270.at<short>(i, j);
+			if (result_315.at<short>(i, j) > max) k = 7, max = result_315.at<short>(i, j);
+			final_result.at<char>(i, j) = k;
 
 			feature_count[k]++;
 		}
@@ -60,7 +60,7 @@ void Kernel_Calculate(Mat &srcImage ,int *resultArray)
 //特征计算。将图像十六等分，计算特征值（FeatureCalcuate.m）
 void Feature_Calcuate(Mat &srcImage , int resultArray[128])
 {
-	int m = srcImage.row, n = srcImage.col;
+	int m = srcImage.rows, n = srcImage.cols;
 	int rowsN = m / 4, colsN = n / 4;
 	int *p = resultArray;
 
@@ -74,3 +74,4 @@ void Feature_Calcuate(Mat &srcImage , int resultArray[128])
 		}
 	}
 }
+
