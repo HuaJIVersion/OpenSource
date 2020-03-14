@@ -8,18 +8,18 @@ int openPort()
 		return _errorCode = -1;
 	}
 
-	termios tOption;                                // �������ýṹ��
-	tcgetattr(_serialFd, &tOption);                 //��ȡ��ǰ����
+	termios tOption;                                // 串口配置结构体
+	tcgetattr(_serialFd, &tOption);                 //获取当前设置
 	cfmakeraw(&tOption);
-	cfsetispeed(&tOption, B9600);                 // ���ղ�����
-	cfsetospeed(&tOption, B9600);                 // ���Ͳ�����
+	cfsetispeed(&tOption, B9600);                 // 接收波特率
+	cfsetospeed(&tOption, B9600);                 // 发送波特率
 	tcsetattr(_serialFd, TCSANOW, &tOption);
 	tOption.c_cflag &= ~PARENB;
 	tOption.c_cflag &= ~CSTOPB;
 	tOption.c_cflag &= ~CSIZE;
 	tOption.c_cflag |= CS8;
 	tOption.c_cflag &= ~INPCK;
-	tOption.c_cflag |= (B9600 | CLOCAL | CREAD);  // ���ò����ʣ��������ӣ�����ʹ��
+	tOption.c_cflag |= (B9600 | CLOCAL | CREAD);  // 设置波特率，本地连接，接收使能
 	tOption.c_cflag &= ~(INLCR | ICRNL);
 	tOption.c_cflag &= ~(IXON);
 	tOption.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
@@ -27,14 +27,16 @@ int openPort()
 	tOption.c_oflag &= ~(ONLCR | OCRNL);
 	tOption.c_iflag &= ~(ICRNL | INLCR);
 	tOption.c_iflag &= ~(IXON | IXOFF | IXANY);
-	tOption.c_cc[VTIME] = 1;                        //ֻ������Ϊ����ʱ��������������Ч
+	tOption.c_cc[VTIME] = 1;                        //只有设置为阻塞时这两个参数才有效
 	tOption.c_cc[VMIN] = 1;
-	tcflush(_serialFd, TCIOFLUSH);                  //TCIOFLUSHˢ�����롢������С�
+	tcflush(_serialFd, TCIOFLUSH);                   //TCIOFLUSH刷新输入、输出队列。
 
 	cout << "Serial preparation complete." << endl;
 	return _errorCode = 0;
 }
-
+/*
+*	@Brief: close port
+*/
 int closePort()
 {
 	tcflush(_serialFd, TCIOFLUSH);
@@ -50,7 +52,9 @@ int closePort()
 	}
 	return _errorCode;
 }
-
+/*
+*	@Brief: send control data
+*/
 int send(control_frame& ctl_f)
 {
 	ctl_f.sof = FSOF;
@@ -71,7 +75,9 @@ int send(control_frame& ctl_f)
 
 	return _errorCode;
 }
-
+/*
+*	@Brief:receive feedback data
+*/
 int receive(feedback_frame& fdk_f)
 {
 	fdk_f.sof = FSOF;
