@@ -48,7 +48,7 @@ namespace cvex
 	}
 
 	/*
-	*	@Brief: Get manhattan distance of two points, i.e., |¡÷x+¡÷y|.
+	*	@Brief: Get manhattan distance of two points, i.e., |Â¡Ã·x+Â¡Ã·y|.
 	*/
 	template<typename T>
 	float distanceManhattan(const cv::Point_<T>& pt1, const cv::Point_<T>& pt2)
@@ -128,11 +128,15 @@ namespace cvex
 	*	@Brief: shows the histogram of an image
 	*/
 	void showHist(const cv::Mat img);
-
+	/*
+	*	@Brief: draw the input rectangle on the image
+	*	@Input: @img: source image
+	*			@rec: rectangle to draw
+	*/
 	void rotatedRectangle(cv::Mat& img, const cv::RotatedRect& rec, const cv::Scalar& color);
 
 	/*
-	*	@Brief: Draw a single contour
+	*	@Brief: imshow contours
 	*	@Input: @contour: contour must be Mat or vector<Point>
 	*/
 	template<typename ContourType>
@@ -157,7 +161,7 @@ namespace cvex
 	}
 
 	/*
-	*	@Brief: Draw a contours
+	*	@Brief: imshow contours
 	*	@Input: @contour: contour  must be Mat or vector<Point>
 	*/
 	template<typename ContoursType>
@@ -184,7 +188,10 @@ namespace cvex
 	template <typename RecType, bool = std::is_pointer<RecType>::value>
 	struct showRectangle_wrapper
 	{};
-
+	/*
+	*	@brief: imshow the source image in BGR with rectangles
+	*	@Input: @rec: rectangles
+	*/
 	template <typename RecType>
 	struct showRectangle_wrapper<RecType, true>
 	{
@@ -209,7 +216,10 @@ namespace cvex
 
 		}
 	};
-
+	/*
+	*	@brief: imshow the source image in BGR with rectangles
+	*	@Input: @rec: rectangles
+	*/
 	template <typename RecType>
 	struct showRectangle_wrapper<RecType, false>
 	{
@@ -234,7 +244,10 @@ namespace cvex
 		}
 
 	};
-
+	/*
+	*	@Brief: imshow rectangles in the given position
+	*	@Input:@recs_or_recPtrs:rectangle or rectangle pointers
+	*/
 	template <typename RecType>
 	void showRectangle(const std::string& windowName,
 		const cv::Mat& srcImg,
@@ -247,12 +260,17 @@ namespace cvex
 		using RecTypeWithoutRef = typename std::remove_reference<RecType>::type;
 		showRectangle_wrapper<RecTypeWithoutRef>::showRectangle(windowName, srcImg, dstImg, rec, color, waitTime, offset);
 	}
-
+	
+	
 	template <typename RecsContainer, bool = std::is_pointer<RecsContainer>::value>
 	struct showRecs_wrapper
 	{};
-
+	
 	template <typename Recs>
+	/*
+	*	@Brief: imshow rectangles in the given position
+	*	@Input:@recs_or_recPtrs:rectangle or rectangle pointers
+	*/
 	struct showRecs_wrapper<Recs, true>
 	{
 		static void showRectangles(const std::string& windowName,
@@ -281,6 +299,10 @@ namespace cvex
 	};
 
 	template <typename Recs>
+	/*
+	*	@Brief: imshow rectangles in the given position
+	*	@Input:@recs_or_recPtrs:rectangle or rectangle pointers
+	*/
 	struct showRecs_wrapper<Recs, false>
 	{
 		static void showRectangles(const std::string& windowName,
@@ -307,7 +329,10 @@ namespace cvex
 		}
 	};
 
-
+	/*
+	*	@Brief: imshow rectangles in the given position
+	*	@Input:@recs_or_recPtrs:rectangle or rectangle pointers
+	*/
 	template <typename RecsContainer>
 	void showRectangles(const std::string& windowName,
 		const cv::Mat& srcImg,
@@ -352,7 +377,10 @@ namespace cvex
 		}
 	}
 	*/
-
+	/*
+	*	@Brief: draw crossing in the given position 
+	*	@Input:@point:position
+	*/
 	template<typename T>
 	void drawCrossing(const cv::Mat& srcImg,
 		cv::Mat& dstImg,
